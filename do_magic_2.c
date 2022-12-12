@@ -1,6 +1,9 @@
 #include "push_swap.h"
+
 void ft_sort_3(int *a)
 {
+    if (is_a_sorted(a, 3))
+        return;
     if (a[0] > a[1] && a[1] < a[2] && a[0] < a[2])
         swap_first_two(a);
     else if (a[0] > a[1] && a[0] > a[2] && a[1] > a[2])

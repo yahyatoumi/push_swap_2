@@ -225,6 +225,21 @@ int min_index(int *a, int len)
     }
     return (indx);
 }
+int max_index(int *a, int len)
+{
+    int i;
+    int indx;
+
+    i = 1;
+    indx = 0;
+    while (i < len)
+    {
+        if (a[indx] < a[i])
+            indx = i;
+        i++;
+    }
+    return (indx);
+}
 
 void push_min_to_top(int *a, int len)
 {
@@ -246,6 +261,31 @@ void push_min_to_top(int *a, int len)
         while (i + j < len)
         {
             from_bottom_to_top(a, len);
+            i++;
+        }
+    }
+}
+
+void push_max_to_top(int *b, int len)
+{
+    int i;
+    int j;
+
+    i = 0;
+    j = max_index(b, len);
+    if (j <= (len / 2))
+    {
+        while (i < j)
+        {
+            from_top_to_bottom(b, len);
+            i++;
+        }
+    }
+    else
+    {
+        while (i + j < len)
+        {
+            from_bottom_to_top(b, len);
             i++;
         }
     }
@@ -277,23 +317,175 @@ void ft_do_magic(int **a, int *a_len, int **b, int *b_len)
     int len_holder;
     int len_holder2;
 
-    i = 0;
     len_holder = *a_len;
-    while (i < len_holder - 3)
+    while (*a_len > 3)
     {
         if (is_a_sorted(*a, *a_len))
             break;
         push_min_to_top(*a, *a_len);
         ft_push_b(a, b, a_len, b_len);
-        i++;
     }
-    ft_do_magic_2(*a, *b, 3);
+    if (*a_len == 3)
+        ft_do_magic_2(*a, *b, 3);
     i = 0;
     len_holder2 = *a_len;
-    while (i < len_holder - len_holder2)
-    {
+    while (*b_len > 0)
         ft_push_a(a, b, a_len, b_len);
+}
+
+int *sorted_arr(int *arr, int len)
+{
+    int i;
+    int j;
+    int tmp;
+    int *new_arr;
+
+    new_arr = (int *)malloc(sizeof(int) * len);
+    i = 0;
+    while (i < len)
+    {
+        new_arr[i] = arr[i];
         i++;
+    }
+    i = 0;
+    while (i < len)
+    {
+        j = i + 1;
+        while (j < len)
+        {
+            if (new_arr[i] > new_arr[j])
+            {
+                tmp = new_arr[i];
+                new_arr[i] = new_arr[j];
+                new_arr[j] = tmp;
+            }
+            j++;
+        }
+        i++;
+    }
+    return (new_arr);
+}
+
+int biggest_n_index(int *arr, int len)
+{
+    int i;
+    int indx;
+
+    indx = 0;
+    i = 1;
+    while (i < len)
+    {
+        if (arr[i] > arr[indx])
+            indx = i;
+        i++;
+    }
+    return (indx);
+}
+
+int is_it_closer_from_top(int *a, int len, int nb)
+{
+    int i;
+    int j;
+
+    i = 0;
+    j = len;
+    while (i < len)
+    {
+        if (a[i] <= nb)
+            break;
+        i++;
+    }
+    while (j > 0)
+    {
+        if (a[j] <= nb)
+            break;
+        j--;
+    }
+    if (len - j > len - i)
+        return (0);
+    else
+        return (1);
+}
+
+void ft_rr(int *a, int a_len, int *b, int b_len)
+{
+    printf("rr\n");
+    int i;
+    int tmp;
+    int tmp2;
+
+    i = 2;
+    tmp = a[a_len - 1];
+    a[a_len - 1] = a[0];
+    while (i <= a_len)
+    {
+        tmp2 = a[a_len - i];
+        a[a_len - i] = tmp;
+        tmp = tmp2;
+        i++;
+    }
+    i = 2;
+    tmp = b[b_len - 1];
+    b[b_len - 1] = b[0];
+    while (i <= b_len)
+    {
+        tmp2 = b[b_len - i];
+        b[b_len - i] = tmp;
+        tmp = tmp2;
+        i++;
+    }
+}
+
+void ft_do_magic_5(int **a, int *a_len, int **b, int *b_len)
+{
+    int i;
+    int y;
+    int *sorted_a;
+    int x;
+
+    if (*a_len < 25)
+    {
+        ft_do_magic(a, a_len, b, b_len);
+        return;
+    }
+    while (*a_len > 3)
+    {
+        sorted_a = sorted_arr(*a, *a_len);
+        if (*a_len < 200)
+            y = sorted_a[*a_len / 3];
+        else
+            y = sorted_a[*a_len / 11];
+        x = *a_len / 3;
+        if (is_a_sorted(*a, *a_len))
+            break;
+        i = *a_len;
+        while (i >= 3 && x >= 0)
+        {
+            if (is_a_sorted(*a, *a_len))
+                break;
+            if (*a[0] <= y)
+            {
+                x--;
+                ft_push_b(a, b, a_len, b_len);
+                if (0 /**b[0] < (y / 2) && !is_it_closer_from_top(*a, *a_len, y)*/)
+                {
+                    ft_rr(*a, *a_len, *b, *b_len);
+                }
+                else if (*b[0] < (y / 2))
+                    from_top_to_bottom(*b, *b_len);
+            }
+            else if (is_it_closer_from_top(*a, *a_len, y))
+                from_top_to_bottom(*a, *a_len);
+            else
+                from_bottom_to_top(*a, *a_len);
+            i--;
+        }
+    }
+    ft_do_magic_2(*a, *b, 3);
+    while (*b_len > 0)
+    {
+        push_max_to_top(*b, *b_len);
+        ft_push_a(a, b, a_len, b_len);
     }
 }
 
@@ -329,11 +521,17 @@ int main(int ac, char **av)
         ft_do_magic_2(a, b, len);
         return (0);
     }
-    ft_do_magic(&a, &len, &b, &b_len);
-    i = 0;
+    ft_do_magic_5(&a, &len, &b, &b_len);
+    /* printf("a[0] == %i\n", a[0]);
+    i = 1;
     while (i < len)
     {
+        if (a[i] < a[i - 1])
+        {
+            printf("i == %i\n", i);
+            printf("problem");
+        }
         printf("a[%i] == %i\n", i, a[i]);
         i++;
-    }
+    } */
 }
