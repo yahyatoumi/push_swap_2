@@ -440,12 +440,12 @@ int is_it_closer_from_top(int *a, int len, int nb)
     }
     if (i < (len - j))
     {
-        //printf("01len == %i j == %i && i == %i\n", len, j, i);
+        // printf("01len == %i j == %i && i == %i\n", len, j, i);
         return (0);
     }
     else
     {
-       //printf("02len == %i j == %i && i == %i\n", len, j, i);
+        // printf("02len == %i j == %i && i == %i\n", len, j, i);
         return (1);
     }
 }
@@ -519,13 +519,24 @@ void ft_do_magic_5(int **a, int *a_len, int **b, int *b_len)
                     ft_rr(*a, *a_len, *b, *b_len);
                 }
                 else if (*b[0] < (y / 2))
+                {
+                    //printf("y/2 == %i  b[0] == %i\n", y/2, *b[0]);
                     from_top_to_bottom_b(*b, *b_len);
+                }
                 x--;
             }
-            else if (is_it_closer_from_top(*a, *a_len, y))
-                from_top_to_bottom(*a, *a_len);
+            else if (!is_it_closer_from_top(*a, *a_len, y))
+            {
+                while (*a[0] > y)
+                {
+                    from_top_to_bottom(*a, *a_len);
+                }
+            }
             else
-                from_bottom_to_top(*a, *a_len);
+                while (*a[0] > y)
+                {
+                    from_bottom_to_top(*a, *a_len);
+                }
         }
     }
     // printf("len == %i\n", *a_len);
