@@ -1,6 +1,6 @@
 NAME	=	push_swap.a
 
-SRCS	=	push_swap.c
+SRCS	=	push_swap.c ft_split.c do_magic_2.c
 
 OBJS	=	$(SRCS:.c=.o)
 

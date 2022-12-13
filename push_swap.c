@@ -35,6 +35,25 @@ void from_bottom_to_top(int *a, int len)
     }
 }
 
+void from_bottom_to_top_b(int *a, int len)
+{
+    printf("rrb\n");
+    int i;
+    int tmp;
+    int tmp2;
+
+    i = 1;
+    tmp = a[0];
+    a[0] = a[len - 1];
+    while (i < len)
+    {
+        tmp2 = a[i];
+        a[i] = tmp;
+        tmp = tmp2;
+        i++;
+    }
+}
+
 void swap_first_two(int *a)
 {
     printf("sa\n");
@@ -48,6 +67,24 @@ void swap_first_two(int *a)
 void from_top_to_bottom(int *a, int len)
 {
     printf("ra\n");
+    int i;
+    int tmp;
+    int tmp2;
+
+    i = 2;
+    tmp = a[len - 1];
+    a[len - 1] = a[0];
+    while (i <= len)
+    {
+        tmp2 = a[len - i];
+        a[len - i] = tmp;
+        tmp = tmp2;
+        i++;
+    }
+}
+void from_top_to_bottom_b(int *a, int len)
+{
+    printf("rb\n");
     int i;
     int tmp;
     int tmp2;
@@ -277,7 +314,7 @@ void push_max_to_top(int *b, int len)
     {
         while (i < j)
         {
-            from_top_to_bottom(b, len);
+            from_top_to_bottom_b(b, len);
             i++;
         }
     }
@@ -285,7 +322,7 @@ void push_max_to_top(int *b, int len)
     {
         while (i + j < len)
         {
-            from_bottom_to_top(b, len);
+            from_bottom_to_top_b(b, len);
             i++;
         }
     }
@@ -388,7 +425,7 @@ int is_it_closer_from_top(int *a, int len, int nb)
     int j;
 
     i = 0;
-    j = len;
+    j = len - 1;
     while (i < len)
     {
         if (a[i] <= nb)
@@ -401,10 +438,16 @@ int is_it_closer_from_top(int *a, int len, int nb)
             break;
         j--;
     }
-    if (len - j > len - i)
+    if (i < (len - j))
+    {
+        //printf("01len == %i j == %i && i == %i\n", len, j, i);
         return (0);
+    }
     else
+    {
+       //printf("02len == %i j == %i && i == %i\n", len, j, i);
         return (1);
+    }
 }
 
 void ft_rr(int *a, int a_len, int *b, int b_len)
@@ -443,48 +486,54 @@ void ft_do_magic_5(int **a, int *a_len, int **b, int *b_len)
     int *sorted_a;
     int x;
 
-    if (*a_len < 25)
+    /* if (*a_len < 25)
     {
         ft_do_magic(a, a_len, b, b_len);
         return;
-    }
+    } */
     while (*a_len > 3)
     {
         sorted_a = sorted_arr(*a, *a_len);
         if (*a_len < 200)
+        {
             y = sorted_a[*a_len / 3];
+            x = *a_len / 3;
+        }
         else
+        {
             y = sorted_a[*a_len / 11];
-        x = *a_len / 3;
+            x = *a_len / 11;
+        }
         if (is_a_sorted(*a, *a_len))
             break;
         i = *a_len;
-        while (i >= 3 && x >= 0)
+        while (x >= 0)
         {
-            if (is_a_sorted(*a, *a_len))
+            if (is_a_sorted(*a, *a_len) && x < 0)
                 break;
             if (*a[0] <= y)
             {
-                x--;
                 ft_push_b(a, b, a_len, b_len);
-                if (0 /**b[0] < (y / 2) && !is_it_closer_from_top(*a, *a_len, y)*/)
+                if (*b[0] < (y / 2) && is_it_closer_from_top(*a, *a_len, y))
                 {
                     ft_rr(*a, *a_len, *b, *b_len);
                 }
                 else if (*b[0] < (y / 2))
-                    from_top_to_bottom(*b, *b_len);
+                    from_top_to_bottom_b(*b, *b_len);
+                x--;
             }
             else if (is_it_closer_from_top(*a, *a_len, y))
                 from_top_to_bottom(*a, *a_len);
             else
                 from_bottom_to_top(*a, *a_len);
-            i--;
         }
     }
-    ft_do_magic_2(*a, *b, 3);
+    // printf("len == %i\n", *a_len);
+    ft_do_magic_2(*a, *b, *a_len);
     while (*b_len > 0)
     {
         push_max_to_top(*b, *b_len);
+        // printf("max == %i\n", *b[0]);
         ft_push_a(a, b, a_len, b_len);
     }
 }
@@ -522,16 +571,16 @@ int main(int ac, char **av)
         return (0);
     }
     ft_do_magic_5(&a, &len, &b, &b_len);
-    /* printf("a[0] == %i\n", a[0]);
-    i = 1;
-    while (i < len)
-    {
-        if (a[i] < a[i - 1])
-        {
-            printf("i == %i\n", i);
-            printf("problem");
-        }
-        printf("a[%i] == %i\n", i, a[i]);
-        i++;
-    } */
+    // printf("a[0] == %i\n", a[0]);
+    // i = 1;
+    // while (i < len)
+    // {
+    //     if (a[i] < a[i - 1])
+    //     {
+    //         printf("i == %i\n", i);
+    //         printf("problem\n");
+    //     }
+    //     printf("a[%i] == %i\n", i, a[i]);
+    //     i++;
+    // }
 }
