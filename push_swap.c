@@ -370,11 +370,34 @@ void ft_do_magic(int **a, int *a_len, int **b, int *b_len)
         ft_push_a(a, b, a_len, b_len);
 }
 
-int *sorted_arr(int *arr, int len)
+void    sort_arr(int *arr, int len)
 {
     int i;
     int j;
     int tmp;
+
+    i = 0;
+    while (i < len)
+    {
+        j = i + 1;
+        while (j < len)
+        {
+            if (arr[i] > arr[j])
+            {
+                tmp = arr[i];
+                arr[i] = arr[j];
+                arr[j] = tmp;
+            }
+            j++;
+        }
+        i++;
+    }
+}
+
+int *sorted_arr(int *arr, int len)
+{
+    int i;
+    int j;
     int *new_arr;
 
     new_arr = (int *)malloc(sizeof(int) * len);
@@ -384,22 +407,7 @@ int *sorted_arr(int *arr, int len)
         new_arr[i] = arr[i];
         i++;
     }
-    i = 0;
-    while (i < len)
-    {
-        j = i + 1;
-        while (j < len)
-        {
-            if (new_arr[i] > new_arr[j])
-            {
-                tmp = new_arr[i];
-                new_arr[i] = new_arr[j];
-                new_arr[j] = tmp;
-            }
-            j++;
-        }
-        i++;
-    }
+    sort_arr(new_arr, len);
     return (new_arr);
 }
 
@@ -438,16 +446,10 @@ int is_it_closer_from_top(int *a, int len, int nb)
             break;
         j--;
     }
-    if (i < (len - j))
-    {
-        // printf("01len == %i j == %i && i == %i\n", len, j, i);
+    if (i <= (len - j))
         return (0);
-    }
     else
-    {
-        // printf("02len == %i j == %i && i == %i\n", len, j, i);
         return (1);
-    }
 }
 
 void ft_rr(int *a, int a_len, int *b, int b_len)
@@ -479,6 +481,13 @@ void ft_rr(int *a, int a_len, int *b, int b_len)
     }
 }
 
+int devide_or_multiply(int nb)
+{
+    if (nb < 0)
+        return (nb / 2);
+    return (nb * 2);
+}
+
 void ft_do_magic_5(int **a, int *a_len, int **b, int *b_len)
 {
     int i;
@@ -486,15 +495,15 @@ void ft_do_magic_5(int **a, int *a_len, int **b, int *b_len)
     int *sorted_a;
     int x;
 
-    /* if (*a_len < 25)
+    if (*a_len < 25)
     {
         ft_do_magic(a, a_len, b, b_len);
         return;
-    } */
+    }
     while (*a_len > 3)
     {
         sorted_a = sorted_arr(*a, *a_len);
-        if (*a_len < 200)
+        if (*a_len < 350)
         {
             y = sorted_a[*a_len / 3];
             x = *a_len / 3;
@@ -504,50 +513,40 @@ void ft_do_magic_5(int **a, int *a_len, int **b, int *b_len)
             y = sorted_a[*a_len / 11];
             x = *a_len / 11;
         }
+        i = sorted_a[x / 2 + 1];
         if (is_a_sorted(*a, *a_len))
             break;
-        i = *a_len;
         while (x >= 0)
         {
-            if (is_a_sorted(*a, *a_len) && x < 0)
-                break;
             if (*a[0] <= y)
             {
                 ft_push_b(a, b, a_len, b_len);
-                if (*b[0] < (y / 2) && is_it_closer_from_top(*a, *a_len, y))
-                {
+
+                if (*b[0] > i && !is_it_closer_from_top(*a, *a_len, y))
                     ft_rr(*a, *a_len, *b, *b_len);
-                }
-                else if (*b[0] < (y / 2))
-                {
-                    //printf("y/2 == %i  b[0] == %i\n", y/2, *b[0]);
+                else if (*b[0] > i)
                     from_top_to_bottom_b(*b, *b_len);
-                }
                 x--;
             }
             else if (!is_it_closer_from_top(*a, *a_len, y))
-            {
-                while (*a[0] > y)
-                {
                     from_top_to_bottom(*a, *a_len);
-                }
-            }
-            else
-                while (*a[0] > y)
-                {
+            else if (is_it_closer_from_top(*a, *a_len, y))
                     from_bottom_to_top(*a, *a_len);
-                }
         }
     }
-    // printf("len == %i\n", *a_len);
     ft_do_magic_2(*a, *b, *a_len);
     while (*b_len > 0)
     {
         push_max_to_top(*b, *b_len);
-        // printf("max == %i\n", *b[0]);
         ft_push_a(a, b, a_len, b_len);
     }
 }
+
+/* int main()
+{
+    int arr[7] = {1, -5, -3, 12, -2, 10, 9};
+    printf("---%i---\n", is_it_closer_from_top(arr, 7, 0));
+} */
 
 int main(int ac, char **av)
 {
