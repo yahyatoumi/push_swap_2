@@ -503,17 +503,32 @@ void ft_do_magic_5(int **a, int *a_len, int **b, int *b_len)
     while (*a_len > 3)
     {
         sorted_a = sorted_arr(*a, *a_len);
-        if (*a_len < 350)
+        if (*a_len <= 100)
         {
             y = sorted_a[*a_len / 3];
             x = *a_len / 3;
         }
+        else if (*a_len <= 190)
+        {
+            y = sorted_a[*a_len / 4];
+            x = *a_len / 4;
+        }
+        else if (*a_len <= 290)
+        {
+            y = sorted_a[*a_len / 5];
+            x = *a_len / 5;
+        }
+        else if (*a_len <= 400)
+        {
+            y = sorted_a[*a_len / 6];
+            x = *a_len / 6;
+        }
         else
         {
-            y = sorted_a[*a_len / 11];
-            x = *a_len / 11;
+            y = sorted_a[*a_len / 7];
+            x = *a_len / 7;
         }
-        i = sorted_a[x / 2 + 1];
+        i = sorted_a[(x / 2) + 1];
         if (is_a_sorted(*a, *a_len))
             break;
         while (x >= 0)
@@ -521,17 +536,17 @@ void ft_do_magic_5(int **a, int *a_len, int **b, int *b_len)
             if (*a[0] <= y)
             {
                 ft_push_b(a, b, a_len, b_len);
-
-                if (*b[0] > i && !is_it_closer_from_top(*a, *a_len, y))
+                if (*b[0] < i && !is_it_closer_from_top(*a, *a_len, y) && *a[0] > y)
                     ft_rr(*a, *a_len, *b, *b_len);
-                else if (*b[0] > i)
+                else if (*b[0] < i)
                     from_top_to_bottom_b(*b, *b_len);
                 x--;
             }
-            else if (!is_it_closer_from_top(*a, *a_len, y))
-                    from_top_to_bottom(*a, *a_len);
-            else if (is_it_closer_from_top(*a, *a_len, y))
-                    from_bottom_to_top(*a, *a_len);
+            // else if (!is_it_closer_from_top(*a, *a_len, y))
+            // else if (is_it_closer_from_top(*a, *a_len, y))
+                // from_bottom_to_top(*a, *a_len);
+            else
+                from_top_to_bottom(*a, *a_len);
         }
     }
     ft_do_magic_2(*a, *b, *a_len);
