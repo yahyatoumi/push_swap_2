@@ -370,7 +370,7 @@ void ft_do_magic(int **a, int *a_len, int **b, int *b_len)
         ft_push_a(a, b, a_len, b_len);
 }
 
-void    sort_arr(int *arr, int len)
+void sort_arr(int *arr, int len)
 {
     int i;
     int j;
@@ -488,6 +488,35 @@ int devide_or_multiply(int nb)
     return (nb * 2);
 }
 
+void ft_do_split(int *x, int *y, int *sorted_arr, int a_len)
+{
+    if (a_len <= 150)
+    {
+        *y = sorted_arr[a_len / 3];
+        *x = a_len / 3;
+    }
+    else if (a_len <= 200)
+    {
+        *y = sorted_arr[a_len / 4];
+        *x = a_len / 4;
+    }
+    else if (a_len <= 300)
+    {
+        *y = sorted_arr[a_len / 5];
+        *x = a_len / 5;
+    }
+    else if (a_len <= 400)
+    {
+        *y = sorted_arr[a_len / 6];
+        *x = a_len / 6;
+    }
+    else
+    {
+        *y = sorted_arr[a_len / 7];
+        *x = a_len / 7;
+    }
+}
+
 void ft_do_magic_5(int **a, int *a_len, int **b, int *b_len)
 {
     int i;
@@ -503,17 +532,18 @@ void ft_do_magic_5(int **a, int *a_len, int **b, int *b_len)
     while (*a_len > 3)
     {
         sorted_a = sorted_arr(*a, *a_len);
-        if (*a_len <= 100)
+        ft_do_split(&x, &y, sorted_a, *a_len);
+        /* if (*a_len <= 100)
         {
             y = sorted_a[*a_len / 3];
             x = *a_len / 3;
         }
-        else if (*a_len <= 190)
+        else if (*a_len <= 200)
         {
             y = sorted_a[*a_len / 4];
             x = *a_len / 4;
         }
-        else if (*a_len <= 290)
+        else if (*a_len <= 300)
         {
             y = sorted_a[*a_len / 5];
             x = *a_len / 5;
@@ -527,7 +557,7 @@ void ft_do_magic_5(int **a, int *a_len, int **b, int *b_len)
         {
             y = sorted_a[*a_len / 7];
             x = *a_len / 7;
-        }
+        } */
         i = sorted_a[(x / 2) + 1];
         if (is_a_sorted(*a, *a_len))
             break;
@@ -542,9 +572,6 @@ void ft_do_magic_5(int **a, int *a_len, int **b, int *b_len)
                     from_top_to_bottom_b(*b, *b_len);
                 x--;
             }
-            // else if (!is_it_closer_from_top(*a, *a_len, y))
-            // else if (is_it_closer_from_top(*a, *a_len, y))
-                // from_bottom_to_top(*a, *a_len);
             else
                 from_top_to_bottom(*a, *a_len);
         }
@@ -556,12 +583,6 @@ void ft_do_magic_5(int **a, int *a_len, int **b, int *b_len)
         ft_push_a(a, b, a_len, b_len);
     }
 }
-
-/* int main()
-{
-    int arr[7] = {1, -5, -3, 12, -2, 10, 9};
-    printf("---%i---\n", is_it_closer_from_top(arr, 7, 0));
-} */
 
 int main(int ac, char **av)
 {
