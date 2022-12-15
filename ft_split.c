@@ -1,39 +1,42 @@
 #include "push_swap.h"
 
-int count_strings(char *str)
+int	count_strings(char *str)
 {
-	int i;
-	int count;
+	int	i;
+	int	count;
 
 	count = 0;
 	i = 0;
 	while (str[i] != '\0')
 	{
-		while (str[i] != '\0' && (str[i] == 10 || str[i] == 9 || str[i] == 32 || str[i] == 0))
+		while (str[i] != '\0'
+			&& (str[i] == 10 || str[i] == 9 || str[i] == 32 || str[i] == 0))
 			i++;
 		if (str[i] != '\0')
 			count++;
-		while (str[i] != '\0' && !(str[i] == 10 || str[i] == 9 || str[i] == 32 || str[i] == 0))
+		while (str[i] != '\0'
+			&& !(str[i] == 10 || str[i] == 9 || str[i] == 32 || str[i] == 0))
 			i++;
 	}
 	return (count);
 }
 
-int ft_strlen_sep(char *str)
+int	ft_strlen_sep(char *str)
 {
-	int i;
+	int	i;
 
 	i = 0;
-	while (str[i] && !(str[i] == 10 || str[i] == 9 || str[i] == 32 || str[i] == 0))
+	while (str[i]
+		&& !(str[i] == 10 || str[i] == 9 || str[i] == 32 || str[i] == 0))
 		i++;
 	return (i);
 }
 
-char *ft_word(char *str)
+char	*ft_word(char *str)
 {
-	int len_word;
-	int i;
-	char *word;
+	int		len_word;
+	int		i;
+	char	*word;
 
 	i = 0;
 	len_word = ft_strlen_sep(str);
@@ -49,7 +52,7 @@ char *ft_word(char *str)
 
 void	free_split_2(char **arr)
 {
-	int i;
+	int	i;
 
 	i = 0;
 	while (arr[i])
@@ -57,25 +60,25 @@ void	free_split_2(char **arr)
 	free(arr);
 }
 
-char **ft_split(char *str)
+char	**ft_split(char *str)
 {
-	char **strings;
-	int i;
+	char	**strings;
+	int		i;
 
 	i = 0;
 	strings = (char **)malloc(sizeof(char *) * (count_strings(str) + 1));
 	while (*str != '\0')
 	{
-		while (*str != '\0' && (*str == 10 || *str == 9 || *str == 32 || *str == 0))
+		while (*str != '\0'
+			&& (*str == 10 || *str == 9 || *str == 32 || *str == 0))
 			str++;
 		if (*str != '\0')
 		{
 			strings[i] = ft_word(str);
-			if (!ft_atoi_checker(strings[i]) || !strings[i] || atoi(strings[i]) > 2147483647 || atoi(strings[i]) < -2147483648)
-			{
+			if (!ft_atoi_checker(strings[i]) || !strings[i]
+				|| atoi(strings[i]) > 2147483647
+				|| atoi(strings[i]) < -2147483648)
 				free_split_2(strings);
-				return (0);
-			}
 			i++;
 		}
 		while (*str && !(*str == 10 || *str == 9 || *str == 32 || *str == 0))
