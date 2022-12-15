@@ -16,6 +16,28 @@ int ft_atoi_checker(char *str)
     return (1);
 }
 
+long long ft_atoi(const char *str)
+{
+    unsigned long long num;
+    int i;
+    int np;
+
+    np = 1;
+    i = 0;
+    num = 0;
+    while (str[i] == ' ' || str[i] == '\t' || str[i] == '\f' || str[i] == '\r' || str[i] == '\n' || str[i] == '\v')
+        i++;
+    if (str[i] == '+' || str[i] == '-')
+        if (str[i++] == '-')
+            np = -1;
+    while (str[i] >= '0' && str[i] <= '9')
+    {
+        num = num * 10 + (str[i] - '0');
+        i++;
+    }
+    return ((np * num));
+}
+
 void from_bottom_to_top(int *a, int len)
 {
     printf("rra\n");
@@ -168,6 +190,15 @@ void ft_push_a(int **a, int **b, int *a_len, int *b_len)
     *a_len = a_new_len;
 }
 
+void free_split(char **arr)
+{
+    int i;
+
+    i = 0;
+    while (arr[i])
+        free(arr[i++]);
+    free(arr);
+}
 int ft_number_of_nbrs(char *str)
 {
     int i;
@@ -180,23 +211,14 @@ int ft_number_of_nbrs(char *str)
     while (arr[i])
     {
         if (!ft_atoi_checker(arr[i]))
+        {
+            free_split(arr);
             return (0);
-        free(arr[i]);
+        }
         i++;
     }
-    free(arr);
+    free_split(arr);
     return (i);
-}
-
-int free_split(char **arr)
-{
-    int i;
-
-    i = 0;
-    while (arr[i])
-        free(arr[i++]);
-    free(arr);
-    return (0);
 }
 
 int ft_set_a_2(int *a, int len, char **av)
@@ -213,13 +235,14 @@ int ft_set_a_2(int *a, int len, char **av)
         j = 0;
         arr = ft_split(av[x]);
         if (!arr || !ft_number_of_nbrs(av[x]))
-            return 0;
+            return (free_split(arr), free(a), 0);
         while (arr[j])
         {
-            a[i] = atoi(arr[j]);
-            i++;
-            j++;
+            a[i++] = ft_atoi(arr[j++]);
+            if (ft_atoi(arr[j - 1]) > 2147483647 || ft_atoi(arr[j - 1]) < -2147483648)
+                return (free(a), free_split(arr), 0);
         }
+        free_split(arr);
         x++;
     }
     return (1);
@@ -229,9 +252,6 @@ int *ft_set_a(char **av, int *len)
 {
     int *a;
     int i;
-    int j;
-    int x;
-    char **arr;
     int oldlen;
 
     oldlen = *len;
@@ -263,7 +283,10 @@ int ft_check_dup(int *a, int len)
         while (j < len)
         {
             if (a[i] == a[j])
+            {
+                free(a);
                 return (1);
+            }
             j++;
         }
         i++;
@@ -386,12 +409,14 @@ void ft_do_magic(int **a, int *a_len, int **b, int *b_len)
         push_min_to_top(*a, *a_len);
         ft_push_b(a, b, a_len, b_len);
     }
-    if (*a_len == 3)
-        ft_do_magic_2(*a, *b, 3);
+    if (*a_len <= 3)
+        ft_do_magic_2(*a, *b, *a_len);
     i = 0;
     len_holder2 = *a_len;
     while (*b_len > 0)
         ft_push_a(a, b, a_len, b_len);
+    free(*a);
+    free(*b);
 }
 
 void sort_arr(int *arr, int len)
@@ -514,34 +539,26 @@ int devide_or_multiply(int nb)
     return (nb * 2);
 }
 
+void set_x_y(NBR *nbrs, int *sorted_arr, int a_len, int devider)
+{
+    nbrs->y = sorted_arr[a_len / devider];
+    nbrs->x = a_len / devider;
+}
+
 void ft_do_split(NBR *nbrs, int *sorted_arr, int a_len)
 {
-    if (a_len <= 150)
-    {
-        nbrs->y = sorted_arr[a_len / 3];
-        nbrs->x = a_len / 3;
-    }
+    if (a_len <= 100)
+        set_x_y(nbrs, sorted_arr, a_len, 3);
     else if (a_len <= 200)
-    {
-        nbrs->y = sorted_arr[a_len / 4];
-        nbrs->x = a_len / 4;
-    }
+        set_x_y(nbrs, sorted_arr, a_len, 4);
     else if (a_len <= 300)
-    {
-        nbrs->y = sorted_arr[a_len / 5];
-        nbrs->x = a_len / 5;
-    }
+        set_x_y(nbrs, sorted_arr, a_len, 5);
     else if (a_len <= 400)
-    {
-        nbrs->y = sorted_arr[a_len / 6];
-        nbrs->x = a_len / 6;
-    }
+        set_x_y(nbrs, sorted_arr, a_len, 6);
     else
-    {
-        nbrs->y = sorted_arr[a_len / 7];
-        nbrs->x = a_len / 7;
-    }
+        set_x_y(nbrs, sorted_arr, a_len, 7);
     nbrs->i = sorted_arr[(nbrs->x / 2) + 1];
+    free(nbrs->sorted_a);
 }
 
 void do_magic_part2(int **a, int *a_len, int **b, int *b_len)
@@ -552,6 +569,8 @@ void do_magic_part2(int **a, int *a_len, int **b, int *b_len)
         push_max_to_top(*b, *b_len);
         ft_push_a(a, b, a_len, b_len);
     }
+    free(*a);
+    free(*b);
 }
 
 void ft_do_magic_5(int **a, int *a_len, int **b, int *b_len)
@@ -581,6 +600,28 @@ void ft_do_magic_5(int **a, int *a_len, int **b, int *b_len)
     }
 }
 
+void fre_aandb(int *a, int *b)
+{
+    free(a);
+    free(b);
+}
+int main_2(int **a, int *a_len, int **b, int *b_len)
+{
+    if (is_a_sorted(*a, *a_len))
+    {
+        fre_aandb(*a, *b);
+        return (0);
+    }
+    if (*a_len < 25)
+    {
+        ft_do_magic(a, a_len, b, b_len);
+        return (0);
+    }
+    ft_do_magic_5(a, a_len, b, b_len);
+    do_magic_part2(a, a_len, b, b_len);
+    return (1);
+}
+
 int main(int ac, char **av)
 {
     int len;
@@ -588,7 +629,9 @@ int main(int ac, char **av)
     int *a;
     int *b;
     int i;
+    pid_t pid;
 
+    pid = getpid();
     len = ac - 1;
     b_len = 0;
     a = ft_set_a(av, &len);
@@ -598,30 +641,16 @@ int main(int ac, char **av)
         return (0);
     }
     b = (int *)malloc(sizeof(int));
-    if (!a)
+    if (!b)
     {
+        free(a);
         printf("error!");
         return (0);
     }
-    if (is_a_sorted(a, len))
-    {
-        printf("already sorted!");
+    if (!main_2(&a, &len, &b, &b_len))
         return (0);
-    }
-    if (len <= 3)
-    {
-        ft_do_magic_2(a, b, len);
-        return (0);
-    }
-    if (len < 25)
-    {
-        ft_do_magic(&a, &len, &b, &b_len);
-        return (0);
-    }
-    ft_do_magic_5(&a, &len, &b, &b_len);
-    do_magic_part2(&a, &len, &b, &b_len);
 
-    printf("a[0] == %i\n", a[0]);
+    /* printf("a[0] == %i\n", a[0]);
     i = 1;
     while (i < len)
     {
@@ -633,4 +662,5 @@ int main(int ac, char **av)
         printf("a[%i] == %i\n", i, a[i]);
         i++;
     }
+    printf("i === %i\n", atoi("481052693876")); */
 }

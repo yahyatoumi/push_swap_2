@@ -33,5 +33,6 @@ void from_top_to_bottom(int *a, int len);
 void swap_first_two(int *a);
 void from_bottom_to_top(int *a, int len);
 int ft_atoi_checker(char *str);
+void    fre_aandb(int *a, int *b);
 
 #endif

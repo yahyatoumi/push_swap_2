@@ -1,14 +1,5 @@
 #include "push_swap.h"
 
-int check_separator(char c)
-{
-	if (c == 10 || c == 9 || c == 32)
-		return (1);
-	if (c == 0)
-		return (1);
-	return (0);
-}
-
 int count_strings(char *str)
 {
 	int i;
@@ -18,11 +9,11 @@ int count_strings(char *str)
 	i = 0;
 	while (str[i] != '\0')
 	{
-		while (str[i] != '\0' && check_separator(str[i]))
+		while (str[i] != '\0' && (str[i] == 10 || str[i] == 9 || str[i] == 32 || str[i] == 0))
 			i++;
 		if (str[i] != '\0')
 			count++;
-		while (str[i] != '\0' && !check_separator(str[i]))
+		while (str[i] != '\0' && !(str[i] == 10 || str[i] == 9 || str[i] == 32 || str[i] == 0))
 			i++;
 	}
 	return (count);
@@ -33,7 +24,7 @@ int ft_strlen_sep(char *str)
 	int i;
 
 	i = 0;
-	while (str[i] && !check_separator(str[i]))
+	while (str[i] && !(str[i] == 10 || str[i] == 9 || str[i] == 32 || str[i] == 0))
 		i++;
 	return (i);
 }
@@ -56,6 +47,16 @@ char *ft_word(char *str)
 	return (word);
 }
 
+void	free_split_2(char **arr)
+{
+	int i;
+
+	i = 0;
+	while (arr[i])
+		free(arr[i++]);
+	free(arr);
+}
+
 char **ft_split(char *str)
 {
 	char **strings;
@@ -65,18 +66,20 @@ char **ft_split(char *str)
 	strings = (char **)malloc(sizeof(char *) * (count_strings(str) + 1));
 	while (*str != '\0')
 	{
-		while (*str != '\0' && check_separator(*str))
+		while (*str != '\0' && (*str == 10 || *str == 9 || *str == 32 || *str == 0))
 			str++;
 		if (*str != '\0')
 		{
 			strings[i] = ft_word(str);
-			if (!ft_atoi_checker(strings[i]))
+			if (!ft_atoi_checker(strings[i]) || !strings[i] || atoi(strings[i]) > 2147483647 || atoi(strings[i]) < -2147483648)
+			{
+				free_split_2(strings);
 				return (0);
+			}
 			i++;
 		}
-		while (*str && !check_separator(*str))
+		while (*str && !(*str == 10 || *str == 9 || *str == 32 || *str == 0))
 			str++;
 	}
-	strings[i] = 0;
-	return (strings);
+	return (strings[i] = 0, strings);
 }
