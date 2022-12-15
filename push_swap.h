@@ -1,6 +1,15 @@
 #ifndef PUSH_SWAP
 #define PUSH_SWAP
 
+typedef struct nbrs
+{
+    int x;
+    int i;
+    int y;
+    int *sorted_a;
+
+} NBR;
+
 #include <stdio.h>
 #include <unistd.h>
 #include <stdlib.h>
