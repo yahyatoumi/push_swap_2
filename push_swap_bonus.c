@@ -1,4 +1,4 @@
-#include "push_swap.h"
+#include "push_swap_bonus.h"
 
 void ft_do_split(t_nbr *t_nbrs, int *sorted_arr, int a_len)
 {
@@ -79,26 +79,29 @@ void test()
 
 int main(int ac, char **av)
 {
-	//atexit(test);
+	atexit(test);
+
+	t_params nbrs;
 	int len;
 	int b_len;
 	int *a;
 	int *b;
 
-	len = ac - 1;
-	b_len = 0;
-	a = ft_set_a(av, &len);
-	if (!a || ft_check_dup(a, len))
+	nbrs.a_len = ac - 1;
+	nbrs.b_len = 0;
+	nbrs.a = ft_set_a(av, &nbrs.a_len);
+	if (!nbrs.a || ft_check_dup(nbrs.a, nbrs.a_len))
 	{
 		write(1, "error\n", 6);
 		return (0);
 	}
-	b = (int *)malloc(sizeof(int));
-	if (!b)
+	nbrs.b = (int *)malloc(sizeof(int));
+	if (!nbrs.b)
 	{
-		free(a);
+		free(nbrs.a);
 		return (0);
 	}
-	if (!main_2(&a, &len, &b, &b_len))
-		return (0);
+	nbrs.a_len = ac - 1;
+	nbrs.a = ft_set_a(av, &nbrs.a_len);
+	bonus_work(&nbrs.a, &nbrs.a_len, &nbrs.b, &nbrs.b_len);
 }

@@ -1,12 +1,11 @@
-#include "push_swap.h"
+#include "push_swap_bonus.h"
 
-void	from_bottom_to_top(int *a, int len)
+void	from_bottom_to_top_bonus(int *a, int len)
 {
 	int		i;
 	int		tmp;
 	int		tmp2;
 
-	write(1, "rra\n", 4);
 	i = 1;
 	tmp = a[0];
 	a[0] = a[len - 1];
@@ -19,13 +18,12 @@ void	from_bottom_to_top(int *a, int len)
 	}
 }
 
-void	from_bottom_to_top_b(int *a, int len)
+void	from_bottom_to_top_b_bonus(int *a, int len)
 {
 	int		i;
 	int		tmp;
 	int		tmp2;
 
-	write(1, "rrb\n", 4);
 	i = 1;
 	tmp = a[0];
 	a[0] = a[len - 1];
@@ -38,23 +36,21 @@ void	from_bottom_to_top_b(int *a, int len)
 	}
 }
 
-void	swap_first_two(int *a)
+void	swap_first_two_bonus(int *a)
 {
 	int		tmp;
 
-	write(1, "sa\n", 3);
 	tmp = a[0];
 	a[0] = a[1];
 	a[1] = tmp;
 }
 
-void	from_top_to_bottom(int *a, int len)
+void	from_top_to_bottom_bonus(int *a, int len)
 {
 	int		i;
 	int		tmp;
 	int		tmp2;
 
-	write(1, "ra\n", 3);
 	i = 2;
 	tmp = a[len - 1];
 	a[len - 1] = a[0];
@@ -67,13 +63,12 @@ void	from_top_to_bottom(int *a, int len)
 	}
 }
 
-void	from_top_to_bottom_b(int *a, int len)
+void	from_top_to_bottom_b_bonus(int *a, int len)
 {
 	int	i;
 	int	tmp;
 	int	tmp2;
 
-	write(1, "rb\n", 3);
 	i = 2;
 	tmp = a[len - 1];
 	a[len - 1] = a[0];

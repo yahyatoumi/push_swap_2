@@ -1,8 +1,8 @@
-#include "push_swap.h"
+#include "push_swap_bonus.h"
 
-int	ft_atoi_checker(char *str)
+int ft_atoi_checker(char *str)
 {
-	int	i;
+	int i;
 
 	i = 1;
 	if (str[0] != '-' && str[0] != '+' && (str[0] < '0' || str[0] > '9'))
@@ -16,17 +16,16 @@ int	ft_atoi_checker(char *str)
 	return (1);
 }
 
-long long	ft_atoi(const char *str)
+long long ft_atoi(const char *str)
 {
-	unsigned long long	num;
-	int					i;
-	int					np;
+	unsigned long long num;
+	int i;
+	int np;
 
 	np = 1;
 	i = 0;
 	num = 0;
-	while (str[i] == ' ' || str[i] == '\t' || str[i] == '\f'
-		|| str[i] == '\r' || str[i] == '\n' || str[i] == '\v')
+	while (str[i] == ' ' || str[i] == '\t' || str[i] == '\f' || str[i] == '\r' || str[i] == '\n' || str[i] == '\v')
 		i++;
 	if (str[i] == '+' || str[i] == '-')
 		if (str[i++] == '-')
@@ -39,10 +38,10 @@ long long	ft_atoi(const char *str)
 	return ((np * num));
 }
 
-int	ft_check_dup(int *a, int len)
+int ft_check_dup(int *a, int len)
 {
-	int	i;
-	int	j;
+	int i;
+	int j;
 
 	i = 0;
 	while (i < len)
@@ -62,10 +61,10 @@ int	ft_check_dup(int *a, int len)
 	return (0);
 }
 
-int	is_a_sorted(int *a, int len)
+int is_a_sorted(int *a, int len)
 {
-	int	i;
-	int	j;
+	int i;
+	int j;
 
 	i = 0;
 	while (i < len)
@@ -82,10 +81,10 @@ int	is_a_sorted(int *a, int len)
 	return (1);
 }
 
-int	ft_number_of_t_nbrs(char *str)
+int ft_number_of_t_nbrs(char *str)
 {
-	int		i;
-	char	**arr;
+	int i;
+	char **arr;
 
 	arr = ft_split(str);
 	if (!arr)

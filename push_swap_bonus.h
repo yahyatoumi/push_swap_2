@@ -5,7 +5,7 @@
 # include <unistd.h>
 # include <stdlib.h>
 
-typedef struct t_nbrs
+typedef struct s_nbrs
 {
 	int	x;
 	int	i;
@@ -13,7 +13,14 @@ typedef struct t_nbrs
 	int	*sorted_a;
 }	t_nbr;
 
-int			ft_print(char *str);
+typedef struct s_parms
+{
+	int	*a;
+	int	a_len;
+	int	*b;
+	int	b_len;
+}	t_params;
+
 char		**ft_split(char *str);
 int			ft_atoi_checker(char *str);
 void		ft_do_magic_2(int *a, int *b, int len);
@@ -45,5 +52,14 @@ long long	ft_atoi(const char *str);
 void		ft_rr(int *a, int a_len, int *b, int b_len);
 int			*sorted_arr(int *arr, int len);
 size_t		ft_strlen(const char *str);
+void		from_bottom_to_top_bonus(int *a, int len);
+void		from_bottom_to_top_b_bonus(int *a, int len);
+void		swap_first_two_bonus(int *a);
+void		from_top_to_bottom_bonus(int *a, int len);
+void		from_top_to_bottom_b_bonus(int *a, int len);
+void		ft_push_b_bonus(int **a, int **b, int *a_len, int *b_len);
+void		ft_push_a_bonus(int **a, int **b, int *a_len, int *b_len);
+void		ft_rr_bonus(int *a, int a_len, int *b, int b_len);
+void		bonus_work(int **a, int *len, int **b, int *b_len);
 
 #endif

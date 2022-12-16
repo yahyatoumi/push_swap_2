@@ -1,4 +1,4 @@
-#include "push_swap.h"
+#include "push_swap_bonus.h"
 
 void	ft_sort_3(int *a)
 {
@@ -40,7 +40,7 @@ void	ft_do_magic_2(int *a, int *b, int len)
 		ft_sort_3(a);
 }
 
-size_t	ft_strlen(const char *str)
+/* size_t	ft_strlen(const char *str)
 {
 	size_t	i;
 
@@ -48,4 +48,4 @@ size_t	ft_strlen(const char *str)
 	while (str[i])
 		i++;
 	return (i);
-}
+} */

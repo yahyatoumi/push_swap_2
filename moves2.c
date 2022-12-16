@@ -44,7 +44,7 @@ void	ft_push_b(int **a, int **b, int *a_len, int *b_len)
 	int		b_new_len;
 	int		a_new_len;
 
-	printf("pb\n");
+	write(1, "pb\n", 3);
 	b_new_len = *b_len;
 	a_new_len = *a_len;
 	*b = ft_add_to_stack(*b, &b_new_len, *a[0]);
@@ -58,7 +58,7 @@ void	ft_push_a(int **a, int **b, int *a_len, int *b_len)
 	int		b_new_len;
 	int		a_new_len;
 
-	printf("pa\n");
+	write(1, "pa\n", 3);
 	b_new_len = *b_len;
 	a_new_len = *a_len;
 	*a = ft_add_to_stack(*a, &a_new_len, *b[0]);
@@ -73,7 +73,7 @@ void	ft_rr(int *a, int a_len, int *b, int b_len)
 	int		tmp;
 	int		tmp2;
 
-	printf("rr\n");
+	write(1, "rr\n", 3);
 	i = 2;
 	tmp = a[a_len - 1];
 	a[a_len - 1] = a[0];
